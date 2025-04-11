@@ -8,6 +8,9 @@ OUTPUT_DATA = [
     'question':"what is your name?", "type": "string"
 },
 {
+    'question':"what is your favorite color?", "type": "string"
+},
+{
     "question": "what is your age?", "type": "number"
 },
 {
@@ -18,6 +21,9 @@ OUTPUT_DATA = [
     "question": "what day is it?", 
     "type": "multiple", 
     "answers":["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-}
+},
+{
+    "question": "what is your favorite animal?", "type": "string"
+},
 ]
 
