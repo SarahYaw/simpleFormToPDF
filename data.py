@@ -1,29 +1,28 @@
-# dummy data for now until the form collection is up and running
-OUTPUT_DATA = [
-{
-    'type':'title',
-    'text': 'Demographic Information'
-},
-{
-    'question':"what is your name?", "type": "string"
-},
-{
-    'question':"what is your favorite color?", "type": "string"
-},
-{
-    "question": "what is your age?", "type": "number"
-},
-{
-    'type':'title',
-    'text': 'Other'
-},
-{
-    "question": "what day is it?", 
-    "type": "multiple", 
-    "answers":["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-},
-{
-    "question": "what is your favorite animal?", "type": "string"
-},
-]
+import json;
 
+output_data = []
+
+def digest_data(file):
+    global output_data
+    if file: # user selected file 
+        fob=open(file,'r')
+        raw = fob.read().split('\n')
+        output_data="["
+        for line in raw:
+            output_data += '{'
+            for word in line.split(','):
+                if word == 'question' or word == 'type' or word == 'text' or word == 'answers':
+                    output_data += '"'+word+'":'
+                elif word == '[' or word == ']':
+                    output_data += word
+                else:
+                    output_data += '"'+word+'",'
+            output_data+='},'
+        output_data+=']'
+        output_data = output_data.replace(',}','}').replace(',]',']')
+        output_data = json.loads(output_data)
+        print('yes file')
+        return output_data
+    else: # user cancel the file browser window
+        print('no file', output_data)
+        return None
