@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import filedialog
+from pdf_maker import makePDF
 import data
 
 # GUI help from https://www.geeksforgeeks.org/create-first-gui-application-using-python-tkinter/
@@ -105,8 +106,14 @@ def clicked():
             outputs.append(question['question'] + " " + str(options_chosen))
 
     # for now display the form data until we build PDF making
-    output = Message(frame, font=('Arial', 16), text=outputs, width=1000)
+    output = Message(frame, font=('Arial', 16), text="Generating...", width=1000)
     output.grid(column=0, row=12, columnspan=5,sticky='W', padx=4)
+    makePDF(outputs)
+    # kill form screen widgets
+    for item in frame.winfo_children():
+        item.destroy()
+    finished = Message(frame, font=('Arial', 16), text="File created!", width=1000)
+    finished.grid(column=0, row=0, columnspan=5,sticky='W', padx=4)
 
 # submit label and button and output
 end_lbl = Label(frame, text="Click the button below when you're ready to generate your PDF", font=('Arial', 16), padx=4)
