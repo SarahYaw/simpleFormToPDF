@@ -21,8 +21,6 @@ def digest_data(file):
         output_data+=']'
         output_data = output_data.replace(',}','}').replace(',]',']')
         output_data = json.loads(output_data)
-        print('yes file')
         return output_data
     else: # user cancel the file browser window
-        print('no file', output_data)
         return None
