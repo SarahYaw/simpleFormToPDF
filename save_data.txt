@@ -1,0 +1,7 @@
+C:/Users/yawpr/Documents/Code/simpleFormToPDF/dummy_data.csv
+
+what is your name? sarah
+what is your favorite color? blue
+what is your age? 27
+what day is it? ['Tuesday']
+what is your favorite animal? dog

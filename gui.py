@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 from pdf_maker import makePDF
+import save_state
 import data
 
 # GUI help from https://www.geeksforgeeks.org/create-first-gui-application-using-python-tkinter/
@@ -17,32 +18,42 @@ window.geometry("%dx%d" % (width, height))
 frame = Frame(window)
 frame.grid(column=0, row=0)
 
-def import_file():
-    global loading_label
-    file = filedialog.askopenfilename(filetypes=[("CSV files", ".csv")])
-    loading_label.grid(column=1, row=3, sticky='WE', columnspan=3)
-    digested = data.digest_data(file)
-    if (digested == None):
-        loading_label = Label(frame, text='No file chosen, please try again.', font=('Arial', 14, 'bold'))
+# save filename
+filename = ''
+
+
+# check if there is a save state
+if not save_state.isSaveState:
+    def import_file():
+        global loading_label, filename
+        file = filedialog.askopenfilename(filetypes=[("CSV files", ".csv")])
+        filename = file
         loading_label.grid(column=1, row=3, sticky='WE', columnspan=3)
-    else: 
-        loading_label = Label(frame, text="Loading...", font=('Arial', 14, 'bold'))
-        loading_label.grid(column=1, row=3, sticky='WE', columnspan=3)
+        digested = data.digest_data(file)
+        if (digested == None):
+            loading_label = Label(frame, text='No file chosen, please try again.', font=('Arial', 14, 'bold'))
+            loading_label.grid(column=1, row=3, sticky='WE', columnspan=3)
+        else: 
+            loading_label = Label(frame, text="Loading...", font=('Arial', 14, 'bold'))
+            loading_label.grid(column=1, row=3, sticky='WE', columnspan=3)
 
-import_label = Label(frame, text="Please upload your csv", font=('Arial', 20, 'bold'))
-import_label.grid(column=1, row=0, sticky='WE', columnspan=3)
-loading_label = Label(frame, text="Loading...", font=('Arial', 14, 'bold'))
-import_button = Button(frame, text="Import File", command=import_file)
-import_button.grid(column=1, row=2, sticky='WE', columnspan=3)
+    import_label = Label(frame, text="Please upload your csv", font=('Arial', 20, 'bold'))
+    import_label.grid(column=1, row=0, sticky='WE', columnspan=3)
+    loading_label = Label(frame, text="Loading...", font=('Arial', 14, 'bold'))
 
-# while loop until we get input csv
-while (len(data.output_data)==0):
-    window.after(500)
-    window.update()
+    import_button = Button(frame, text="Import File", command=import_file)
+    import_button.grid(column=1, row=2, sticky='WE', columnspan=3)
 
-# kill import screen widgets
-for item in frame.winfo_children():
-    item.destroy()
+    # while loop until we get input csv
+    while (len(data.output_data)==0):
+        window.after(500)
+        window.update()
+
+    # kill import screen widgets
+    for item in frame.winfo_children():
+        item.destroy()
+else:
+    save_state.initializeSaveState()
 
 # re-initialize the data so it's not empty
 formSet = data.output_data
@@ -109,6 +120,7 @@ def clicked():
     output = Message(frame, font=('Arial', 16), text="Generating...", width=1000)
     output.grid(column=0, row=12, columnspan=5,sticky='W', padx=4)
     makePDF(outputs)
+    save_state.createSaveState(outputs, filename)
     # kill form screen widgets
     for item in frame.winfo_children():
         item.destroy()
