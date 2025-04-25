@@ -7,7 +7,7 @@
 - tkinter
 - json
 ## Other Details (ㆁᴗㆁ✿)
-I've included a base csv set called `dummy_data.csv` that I've been using to test. The `2025-04-12.pdf` is the output of the dummy csv questions when I filled it out.
+I've included a base csv set called `dummy_data.csv` that I've been using to test. The `2025-04-12.pdf` is the output of the dummy csv questions when I filled it out. The `save_data.txt` is where the program memory is so don't delete it once you run the program or you have to start over.
 
 In the csv, multiple choice answer sets have to be formatted like so:
 ```

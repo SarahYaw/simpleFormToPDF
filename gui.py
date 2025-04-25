@@ -19,7 +19,7 @@ frame = Frame(window)
 frame.grid(column=0, row=0)
 
 # save filename
-filename = ''
+filename = data.filename
 
 
 # check if there is a save state
@@ -57,6 +57,7 @@ else:
 
 # re-initialize the data so it's not empty
 formSet = data.output_data
+filename = data.filename
 
 inputs = []
 # go through each item in the dataset and display properly
@@ -77,14 +78,24 @@ for item in formSet:
     if item['type'] == "string" or item['type'] == 'number':
         # if string or number, show a text box to get the data
         input = Entry(frame, width=20, justify='left', font=('Arial', 16))
+        if item["response"]:
+            input.insert(0,item['response'])
         input.grid(column=1, row=index, sticky='WE', columnspan=3, padx=4)
         inputs.append(input)
     else:
         # if multiple choice show all choices in rows of 4 max
         checkbox_values = []
+        if item['response']:
+            # get indicies of the objects item['response'] has in common with item['answers']
+            indicies = []
+            responses = item['response'].replace('[','').replace(']', '').replace("'",'').split(',')
+            for saved_option in responses:
+                indicies.append(item['answers'].index(saved_option.strip()))
         for ind, option in enumerate(item['answers']):
             checkbox_value = BooleanVar(value=False)
             button = Checkbutton(frame, text=option, justify='left', font=('Arial', 16), variable=checkbox_value)
+            if ind in indicies:
+                button.select()
             col = ind
             row = index
             if ind % 4 == 0 and ind != 0:
